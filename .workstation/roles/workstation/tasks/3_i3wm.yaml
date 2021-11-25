@@ -1,0 +1,14 @@
+---
+- name: I3 | Ensure i3 mandatory folders exist
+  file:
+    path: '{{ ansible_env.HOME }}/{{ item }}'
+    state: directory
+    recurse: true
+  loop:
+    - '.config/i3'
+    - 'screenshots'
+
+- name: I3 | Get Bumblebee status bar
+  git:
+    repo: https://github.com/tobi-wan-kenobi/bumblebee-status.git
+    dest: '{{ ansible_env.HOME }}/.config/i3/bumblebee-status'

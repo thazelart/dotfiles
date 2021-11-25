@@ -1,0 +1,45 @@
+---
+- name: ZSH | Ensure oh-my-zsh not installed
+  stat:
+    path: '{{ ansible_env.HOME }}/.oh-my-zsh/.git'
+  register: oh_my_zsh_folder
+
+- name: ZSH | Download oh-my-zsh installer
+  get_url:
+    url: https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+    dest: /tmp/oh-my-zsh-installer.sh
+    mode: 0775
+  when: not oh_my_zsh_folder.stat.exists
+
+- name: ZSH | Execute /tmp/oh-my-zsh-installer.sh
+  script: /tmp/oh-my-zsh-installer.sh
+  when: not oh_my_zsh_folder.stat.exists
+
+- name: ZSH | Remove /tmp/oh-my-zsh-installer.sh
+  file:
+    path: /tmp/oh-my-zsh-installer.sh
+    state: absent
+  when: not oh_my_zsh_folder.stat.exists
+
+- name: ZSH | Get autosuggestion plugin
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions
+    dest: '{{ ansible_env.HOME }}/.zsh/zsh-autosuggestions'
+
+- name: ZSH | Configure oh-my-zsh theme
+  lineinfile:
+    path: '{{ ansible_env.HOME }}/.zshrc'
+    regexp: '^[# ]*ZSH_CUSTOM='
+    line: "ZSH_CUSTOM={{ ansible_env.HOME }}/.config/oh-my-zsh"
+
+- name: ZSH | Configure oh-my-zsh theme
+  lineinfile:
+    path: '{{ ansible_env.HOME }}/.zshrc'
+    regexp: '^ZSH_THEME='
+    line: ZSH_THEME="thazelart"
+
+- name: ZSH | Change '{{ user }}' default shell
+  become: true
+  user:
+    name: '{{ user }}'
+    shell: /usr/bin/zsh

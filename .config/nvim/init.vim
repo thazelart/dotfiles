@@ -17,6 +17,8 @@ Plug 'psf/black'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'andrewstuart/vim-kubernetes'
+Plug 'sheerun/vim-polyglot'
+Plug 'glassinatorn/figlet-banner'
 call plug#end()
 
 
@@ -35,7 +37,7 @@ autocmd FileType * unlet! g:airline#extensions#whitespace#checks
 let g:airline_theme='luna'
 " remove trailing spaces
 autocmd BufWritePre * :%s/\s\+$//e
-
+command! -nargs=+ Banner lua require'figlet-banner'.banner()
 
 " _   _ _ _   _ ____        _
 "| | | | | |_(_) ___| _ __ (_)_ __  ___

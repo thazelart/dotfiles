@@ -1,0 +1,24 @@
+---
+- include_vars: "{{ ansible_os_family }}.yaml"
+
+- name: Install dependencies
+  become: true
+  package:
+    name: '{{ requirements }}'
+    state: latest
+
+- include: 1_zsh.yaml
+
+- include: 2_nvim.yaml
+
+- include: 3_i3wm.yaml
+
+- include: 4_kubernetes_k9s.yaml
+
+- include: 4_kubernetes_kubectl.yaml
+
+- include: 4_kubernetes_kubectx.yaml
+
+- include: 5_python.yaml
+
+- include: 6_golang.yaml

@@ -1,0 +1,17 @@
+---
+- name: PYTHON | Install python3 black
+  pip:
+    name: git+git://github.com/psf/black
+    executable: pip3
+
+- name: PYTHON | Add serve function
+  blockinfile:
+    path: '{{ ansible_env.HOME }}/.zshrc'
+    marker: '# {mark} PYTHON SERVE FUNCTION'
+    block: |
+      function serve() {
+        dir=$1
+        cd $dir
+        python3 -m http.server
+        cd -
+      }

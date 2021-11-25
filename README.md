@@ -4,13 +4,22 @@ This is my linux setup. Tested on both Fedora and Ubuntu.
 ## Install
 ```bashrc
 git clone --bare git@github.com:thazelart/dotfiles.git
-
-# add this to your ~/.${##*/}rc file
 alias dotfiles='/usr/bin/git --git-dir=$HOME/git/dotfiles --work-tree=$HOME'
+dotfiles checkout -- .workstation
+
+# Install ansible
+ansible-playbook --version || python -m pip install python
+
+dotfiles checkout
+cd .workstation
+ansible-playbook install_workstation.yaml
 
 source ~/.${##*/}rc
 
-dotfiles checkout
+nvim +PlugInstall +qall
+nvim +UpdateRemotePlugins +qall
+nvim +PlugUpdate +qall
+nvim +GoInstallBinaries +qall
 ```
 
 ## Push changes

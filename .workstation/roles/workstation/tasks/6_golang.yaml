@@ -1,0 +1,27 @@
+---
+- name: GOLANG | Get latest release name
+  uri:
+    url: https://golang.org/VERSION?m=text
+    headers:
+    return_content: true
+  register: go_release
+
+- name: GOLANG | Get the binary
+  become: true
+  unarchive:
+    src: 'https://dl.google.com/go/{{ go_release.content }}.linux-amd64.tar.gz'
+    dest: /usr/bin/
+    remote_src: true
+    owner: root
+    group: root
+    mode: 0755
+
+
+- name: GOLANG | Add golang to $PATH
+  blockinfile:
+    path: '{{ ansible_env.HOME }}/.zshrc'
+    marker: '# {mark} ADD GOLANG TO $PATH'
+    block: |
+      export GOPATH=$HOME/go
+      export GOROOT=/usr/bin//go
+      export PATH=$PATH:/usr/bin/go/bin:$GOPATH/bin

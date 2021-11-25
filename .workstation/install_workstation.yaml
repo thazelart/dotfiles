@@ -1,0 +1,25 @@
+- name: Install the machine pre-requistes
+  hosts: localhost
+  pre_tasks:
+    - name: Allow '{{ ansible_user_id }}' to have passwordless sudo
+      become: true
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^{{ ansible_user_id }}'
+        line: '{{ ansible_user_id }} ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+
+    - name: Disable SELinux
+      become: true
+      selinux:
+        state: disabled
+      when: ansible_os_family == 'Redhat'
+
+
+    - name: Get current username
+      set_fact:
+        user: '{{ lookup("env", "USER") }}'
+
+  roles:
+    - name: workstation

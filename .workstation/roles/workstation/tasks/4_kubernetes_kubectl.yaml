@@ -1,0 +1,16 @@
+---
+- name: KUBECTL | Kubectl | Get latest release name
+  uri:
+    url: https://storage.googleapis.com/kubernetes-release/release/stable.txt
+    return_content: true
+  register: kubectl_release
+
+
+- name: KUBECTL | Kubectl | Get the binary
+  become: true
+  get_url:
+    url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_release.content | trim }}/bin/linux/amd64/kubectl'
+    dest: /usr/bin/kubectl2
+    owner: root
+    group: root
+    mode: 0755
