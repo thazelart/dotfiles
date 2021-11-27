@@ -1,3 +1,5 @@
+autoload -Uz compinit && compinit
+
 function serve() {
   dir=$1
   cd $dir
@@ -16,13 +18,13 @@ export me=$USER
 source /home/thazelart/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 ## Aliases
-source /usr/share/bash-completion/completions/git
 alias dotfiles='/usr/bin/git --git-dir=$HOME/git/dotfiles --work-tree=$HOME'
-__git_complete_command dotfiles
+compdef dotfiles git
 alias certext='openssl x509 -text -noout -in -'
 alias vi=nvim
 alias k=kubectl
 complete -F __start_kubectl k
+setopt complete_aliases
 
 ## Functions
 function banner() {
